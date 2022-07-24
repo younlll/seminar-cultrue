@@ -1,6 +1,7 @@
 package seminar.seminar.member.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -16,7 +17,6 @@ import seminar.seminar.member.domain.Organizer;
 import seminar.seminar.member.domain.Participant;
 import seminar.seminar.member.dto.OrganizerRequest;
 import seminar.seminar.member.dto.ParticipantRequest;
-import seminar.seminar.member.service.MemberService;
 import seminar.seminar.member.repository.MemberRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -63,5 +63,27 @@ class MemberServiceTest {
         // then
         Member response = memberRepository.findById(1L).orElseThrow(RuntimeException::new);
         assertThat(response.getName()).isEqualTo(member.getName());
+    }
+
+    @DisplayName("중복된 회원ID 가입시, 예외처리 된다.")
+    @Test
+    void addMemberFailWithDuplicationUserId() {
+        // given
+        ParticipantRequest participantRequest = new ParticipantRequest("name", "19960103", "F", "younlll", "password",
+                "email@gmail.com", "cucumber", "hi, there");
+        Member participant = new Member("name", "19960103", "F", "younlll", "password", "email@gmail.com",
+                new Participant("cucumber", "hi, there"));
+        OrganizerRequest organizerRequest = new OrganizerRequest("name", "19960103", "F", "younlll", "password",
+                "email@gmail.com", "agency");
+        Member organizer = new Member("name", "19960103", "F", "younlll", "password", "email@gmail.com",
+                new Organizer("agency"));
+        when(memberRepository.save(any(Member.class))).thenReturn(participant);
+        memberService.addParticipant(participantRequest);
+
+        when(memberRepository.findByUserId(any(String.class))).thenReturn(participant);
+
+        // when & then
+        assertThatThrownBy(() -> memberService.addOrganizerMember(organizerRequest))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 }
