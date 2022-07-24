@@ -18,12 +18,11 @@ public class MemberInformation {
     }
 
     public static Member createOrganizerMember() {
-        return new Member("name", "19960103", "F", "younlll", "password", "email@gmail.com",
-                new Participant("cucumber", "hi, there"));
+        return new Member("name", "19960103", "F", "younlll", "password", "email@gmail.com", new Organizer("agency"));
     }
 
     public static Member createParticipantMember() {
         return new Member("name", "19960103", "F", "younlll", "password", "email@gmail.com",
-                new Organizer("agency"));
+                new Participant("cucumber", "hi, there"));
     }
 }
