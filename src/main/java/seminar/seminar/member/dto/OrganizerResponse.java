@@ -1,8 +1,8 @@
-package seminar.seminar.dto;
+package seminar.seminar.member.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import seminar.seminar.domain.Member;
+import seminar.seminar.member.domain.Member;
 
 @Getter
 @AllArgsConstructor

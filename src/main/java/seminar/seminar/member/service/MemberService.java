@@ -1,13 +1,13 @@
-package seminar.seminar.service;
+package seminar.seminar.member.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import seminar.seminar.domain.Member;
-import seminar.seminar.dto.OrganizerRequest;
-import seminar.seminar.dto.OrganizerResponse;
-import seminar.seminar.dto.ParticipantRequest;
-import seminar.seminar.dto.ParticipantResponse;
-import seminar.seminar.repository.MemberRepository;
+import seminar.seminar.member.domain.Member;
+import seminar.seminar.member.dto.OrganizerRequest;
+import seminar.seminar.member.dto.OrganizerResponse;
+import seminar.seminar.member.dto.ParticipantRequest;
+import seminar.seminar.member.dto.ParticipantResponse;
+import seminar.seminar.member.repository.MemberRepository;
 
 @Service
 @Transactional(readOnly = true)

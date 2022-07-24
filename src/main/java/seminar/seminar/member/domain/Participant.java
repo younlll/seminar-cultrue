@@ -1,4 +1,4 @@
-package seminar.seminar.domain;
+package seminar.seminar.member.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

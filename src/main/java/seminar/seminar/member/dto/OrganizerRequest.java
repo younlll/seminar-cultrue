@@ -1,12 +1,12 @@
-package seminar.seminar.dto;
+package seminar.seminar.member.dto;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
-import seminar.seminar.domain.Member;
-import seminar.seminar.domain.Organizer;
+import seminar.seminar.member.domain.Member;
+import seminar.seminar.member.domain.Organizer;
 
 @Getter
 @AllArgsConstructor
