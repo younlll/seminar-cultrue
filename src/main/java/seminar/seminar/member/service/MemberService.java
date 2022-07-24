@@ -20,18 +20,27 @@ public class MemberService {
 
     @Transactional
     public OrganizerResponse addOrganizerMember(OrganizerRequest request) {
-        Member member = memberRepository.save(
-                OrganizerRequest.toMember(request.getName(), request.getBirthday(), request.getGender(),
-                        request.getUserId(), request.getPassword(), request.getEmail(), request.getAgency()));
+        Member organizeMember = OrganizerRequest.toMember(request.getName(), request.getBirthday(), request.getGender(),
+                request.getUserId(), request.getPassword(), request.getEmail(), request.getAgency());
+        validateDuplicateMember(organizeMember);
+        Member member = memberRepository.save(organizeMember);
         return OrganizerResponse.toOrganizer(member);
     }
 
     @Transactional
     public ParticipantResponse addParticipant(ParticipantRequest request) {
-        Member member = memberRepository.save(
-                ParticipantRequest.toMember(request.getName(), request.getBirthday(), request.getGender(),
-                        request.getUserId(), request.getPassword(), request.getEmail(), request.getRestrictedMaterial(),
-                        request.getSelfIntroduction()));
+        Member participantMember = ParticipantRequest.toMember(request.getName(), request.getBirthday(),
+                request.getGender(), request.getUserId(), request.getPassword(), request.getEmail(),
+                request.getRestrictedMaterial(), request.getSelfIntroduction());
+        validateDuplicateMember(participantMember);
+        Member member = memberRepository.save(participantMember);
         return ParticipantResponse.toParticipant(member);
+    }
+
+    private void validateDuplicateMember(Member member) {
+        Member findMembers = memberRepository.findByUserId(member.getUserId());
+        if (findMembers != null) {
+            throw new IllegalArgumentException("이미 존재하는 회원ID 입니다.");
+        }
     }
 }
