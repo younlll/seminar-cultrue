@@ -4,11 +4,13 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import seminar.seminar.member.domain.Member;
 import seminar.seminar.member.domain.Organizer;
 
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
 public class OrganizerRequest {
     @NotBlank(message = "회원 이름 입력은 필수입니다.")
