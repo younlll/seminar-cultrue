@@ -13,7 +13,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import seminar.seminar.login.dto.LoginRequest;
 import seminar.seminar.member.common.MemberInformation;
 import seminar.seminar.member.domain.Member;
-import seminar.seminar.member.dto.OrganizerRequest;
 import seminar.seminar.member.repository.MemberRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,7 +27,6 @@ class LoginServiceTest {
     @Test
     void notMatchedUserIdThenLoginFail() {
         // given
-        OrganizerRequest request = MemberInformation.createOrganizerRequest();
         Member member = MemberInformation.createOrganizerMember();
         when(memberRepository.save(any(Member.class))).thenReturn(member);
         memberRepository.save(member);
@@ -43,7 +41,6 @@ class LoginServiceTest {
     @Test
     void notMatchedPasswordThenLoginFail() {
         // given
-        OrganizerRequest request = MemberInformation.createOrganizerRequest();
         Member member = MemberInformation.createOrganizerMember();
         when(memberRepository.save(any(Member.class))).thenReturn(member);
         memberRepository.save(member);

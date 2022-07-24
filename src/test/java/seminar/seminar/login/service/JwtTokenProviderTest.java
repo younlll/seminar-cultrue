@@ -8,7 +8,7 @@ import seminar.seminar.member.common.MemberInformation;
 import seminar.seminar.member.domain.Member;
 
 class JwtTokenProviderTest {
-    private JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
+    private final JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
 
     @DisplayName("jwt 토큰이 정상적으로 발급되었습니다.")
     @Test
