@@ -33,8 +33,7 @@ class MemberServiceTest {
     void addOrganizerMemberSuccess() {
         // given
         OrganizerRequest request = MemberInformation.createOrganizerRequest();
-        Member member = new Member("name", "19960103", "F", "younlll", "password", "email@gmail.com",
-                new Organizer("agency"));
+        Member member = MemberInformation.createOrganizerMember();
         when(memberRepository.save(any(Member.class))).thenReturn(member);
         when(memberRepository.findById(any(Long.class))).thenReturn(Optional.of(member));
 
@@ -51,8 +50,7 @@ class MemberServiceTest {
     void addParticipantMemberSuccess() {
         // given
         ParticipantRequest request = MemberInformation.createParticipantRequest();
-        Member member = new Member("name", "19960103", "F", "younlll", "password", "email@gmail.com",
-                new Participant("cucumber", "hi, there"));
+        Member member = MemberInformation.createParticipantMember();
         when(memberRepository.save(any(Member.class))).thenReturn(member);
         when(memberRepository.findById(any(Long.class))).thenReturn(Optional.of(member));
 
