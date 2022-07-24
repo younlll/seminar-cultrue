@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import seminar.seminar.member.common.MemberInformation;
 import seminar.seminar.member.domain.Member;
 import seminar.seminar.member.domain.Organizer;
 import seminar.seminar.member.domain.Participant;
@@ -31,8 +32,7 @@ class MemberServiceTest {
     @Test
     void addOrganizerMemberSuccess() {
         // given
-        OrganizerRequest request = new OrganizerRequest("name", "19960103", "F", "younlll", "password",
-                "email@gmail.com", "agency");
+        OrganizerRequest request = MemberInformation.createOrganizerRequest();
         Member member = new Member("name", "19960103", "F", "younlll", "password", "email@gmail.com",
                 new Organizer("agency"));
         when(memberRepository.save(any(Member.class))).thenReturn(member);
@@ -50,8 +50,7 @@ class MemberServiceTest {
     @Test
     void addParticipantMemberSuccess() {
         // given
-        ParticipantRequest request = new ParticipantRequest("name", "19960103", "F", "younlll", "password",
-                "email@gmail.com", "cucumber", "hi, there");
+        ParticipantRequest request = MemberInformation.createParticipantRequest();
         Member member = new Member("name", "19960103", "F", "younlll", "password", "email@gmail.com",
                 new Participant("cucumber", "hi, there"));
         when(memberRepository.save(any(Member.class))).thenReturn(member);
@@ -69,14 +68,10 @@ class MemberServiceTest {
     @Test
     void addMemberFailWithDuplicationUserId() {
         // given
-        ParticipantRequest participantRequest = new ParticipantRequest("name", "19960103", "F", "younlll", "password",
-                "email@gmail.com", "cucumber", "hi, there");
-        Member participant = new Member("name", "19960103", "F", "younlll", "password", "email@gmail.com",
-                new Participant("cucumber", "hi, there"));
-        OrganizerRequest organizerRequest = new OrganizerRequest("name", "19960103", "F", "younlll", "password",
-                "email@gmail.com", "agency");
-        Member organizer = new Member("name", "19960103", "F", "younlll", "password", "email@gmail.com",
-                new Organizer("agency"));
+        ParticipantRequest participantRequest = MemberInformation.createParticipantRequest();
+        Member participant = MemberInformation.createOrganizerMember();
+        OrganizerRequest organizerRequest = MemberInformation.createOrganizerRequest();
+        Member organizer = MemberInformation.createParticipantMember();
         when(memberRepository.save(any(Member.class))).thenReturn(participant);
         memberService.addParticipant(participantRequest);
 
