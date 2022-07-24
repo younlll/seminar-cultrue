@@ -71,7 +71,6 @@ class MemberServiceTest {
         ParticipantRequest participantRequest = MemberInformation.createParticipantRequest();
         Member participant = MemberInformation.createOrganizerMember();
         OrganizerRequest organizerRequest = MemberInformation.createOrganizerRequest();
-        Member organizer = MemberInformation.createParticipantMember();
         when(memberRepository.save(any(Member.class))).thenReturn(participant);
         memberService.addParticipant(participantRequest);
 
