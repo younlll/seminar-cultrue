@@ -1,5 +1,9 @@
 package seminar.seminar.login.service;
 
+import static seminar.seminar.config.AuthenticationRoles.ALL;
+import static seminar.seminar.config.AuthenticationRoles.ORGANIZER;
+import static seminar.seminar.config.AuthenticationRoles.PARTICIPANT;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,8 +22,21 @@ public class LoginService {
     public LoginResponse loginMember(LoginRequest loginRequest) {
         Member member = memberRepository.findByUserId(loginRequest.getUserId());
         validateLoginMember(loginRequest, member);
-        String token = jwtTokenProvider.createJwtToken(member);
+        String role = getRoleCriteria(member);
+        String token = jwtTokenProvider.createJwtToken(member, role);
         return new LoginResponse(token);
+    }
+
+    private String getRoleCriteria(Member member) {
+        if (member.getOrganizer() != null && member.getParticipant() != null) {
+            return ALL.name();
+        }
+
+        if (member.getOrganizer() != null) {
+            return ORGANIZER.name();
+        }
+
+        return PARTICIPANT.name();
     }
 
     private void validateLoginMember(LoginRequest loginRequest, Member member) {
