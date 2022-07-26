@@ -1,5 +1,8 @@
 package seminar.seminar.config;
 
+import static seminar.seminar.config.AuthenticationRoles.ORGANIZER;
+import static seminar.seminar.config.AuthenticationRoles.PARTICIPANT;
+
 import java.io.IOException;
 import java.util.Map;
 import javax.servlet.Filter;
@@ -18,8 +21,8 @@ import seminar.seminar.login.service.JwtTokenProvider;
 @Component
 public class JwtAuthenticationFilter implements Filter {
     private static final Map<String, String> authenticationPath = Map.of(
-            "ORGANIZER", "/update/organizer",
-            "PARTICIPANT", "/update/participant"
+            ORGANIZER.name(), "/update/organizer",
+            PARTICIPANT.name(), "/update/participant"
     );
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -32,6 +35,7 @@ public class JwtAuthenticationFilter implements Filter {
         if (token != null && jwtTokenProvider.validateToken(token)) {
             String roles = jwtTokenProvider.getTokenRole(token);
             validateRoles(request, roles);
+            request.setAttribute("email", jwtTokenProvider.getSubject(token));
         }
         chain.doFilter(request, response);
     }
