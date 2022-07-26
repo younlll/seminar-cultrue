@@ -58,4 +58,8 @@ public class JwtTokenProvider {
     private String bearerRemove(String token) {
         return token.substring(TOKEN_PREFIX.length());
     }
+
+    public String getSubject(String token) {
+        return parseJwtToken(token).getSubject();
+    }
 }
