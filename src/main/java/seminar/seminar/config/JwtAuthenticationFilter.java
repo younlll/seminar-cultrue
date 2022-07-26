@@ -37,6 +37,7 @@ public class JwtAuthenticationFilter implements Filter {
             validateRoles(request, roles);
             request.setAttribute("email", jwtTokenProvider.getSubject(token));
         }
+        request.setAttribute("email", jwtTokenProvider.getSubject(token));
         chain.doFilter(request, response);
     }
 
