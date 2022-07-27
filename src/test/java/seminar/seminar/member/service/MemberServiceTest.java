@@ -124,4 +124,15 @@ class MemberServiceTest {
         Member response = memberRepository.findById(1L).orElseThrow(RuntimeException::new);
         assertThat(response.getName()).isEqualTo(modifiedMember.getName());
     }
+
+    @DisplayName("수정하려는 멤버의 정보가 존재하지 않는 경우, 예외처리 된다.")
+    @Test
+    void exceptionNotMatchedModifyParticipant() {
+        // when & then
+        when(memberRepository.findById(any(Long.class))).thenThrow(IllegalArgumentException.class);
+        ParticipantModifyRequest participantModifyRequest = new ParticipantModifyRequest("name2", "19960103", "F",
+                "email2@gmail.com", "mint", "lol");
+        assertThatThrownBy(() -> memberService.modifyParticipant(participantModifyRequest, 1L))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
 }
