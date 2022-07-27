@@ -23,4 +23,8 @@ public class Organizer {
     public Organizer(String agency) {
         this.agency = agency;
     }
+
+    public void modifyOrganizer(String agency) {
+        this.agency = agency;
+    }
 }

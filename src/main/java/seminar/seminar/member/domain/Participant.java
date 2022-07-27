@@ -25,4 +25,9 @@ public class Participant {
         this.restrictedMaterial = restrictedMaterial;
         this.selfIntroduction = selfIntroduction;
     }
+
+    public void modifyParticipant(String restrictedMaterial, String selfIntroduction) {
+        this.restrictedMaterial = restrictedMaterial;
+        this.selfIntroduction = selfIntroduction;
+    }
 }

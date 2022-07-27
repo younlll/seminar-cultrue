@@ -31,8 +31,8 @@ public class OrganizerRequest {
 
     private String agency;
 
-    public static Member toMember(String name, String birthday, String gender, String userId, String password,
-                                  String email, String agency) {
-        return new Member(name, birthday, gender, userId, password, email, new Organizer(agency));
+    public static Member toMember(OrganizerRequest request) {
+        return new Member(request.name, request.getBirthday(), request.getGender(), request.getUserId(),
+                request.getPassword(), request.getEmail(), new Organizer(request.getAgency()));
     }
 }
