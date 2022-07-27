@@ -14,10 +14,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import seminar.seminar.member.common.MemberInformation;
 import seminar.seminar.member.domain.Member;
-import seminar.seminar.member.domain.Organizer;
-import seminar.seminar.member.domain.Participant;
+import seminar.seminar.member.dto.OrganizerModifyRequest;
 import seminar.seminar.member.dto.OrganizerRequest;
+import seminar.seminar.member.dto.OrganizerResponse;
+import seminar.seminar.member.dto.ParticipantModifyRequest;
 import seminar.seminar.member.dto.ParticipantRequest;
+import seminar.seminar.member.dto.ParticipantResponse;
 import seminar.seminar.member.repository.MemberRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -77,5 +79,49 @@ class MemberServiceTest {
         // when & then
         assertThatThrownBy(() -> memberService.addOrganizerMember(organizerRequest))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @DisplayName("주최자의 정보가 정상적으로 수정되었습니다.")
+    @Test
+    void modifyOrganizerSuccess() {
+        // given
+        OrganizerRequest request = MemberInformation.createOrganizerRequest();
+        Member member = MemberInformation.createOrganizerMember();
+        when(memberRepository.save(any(Member.class))).thenReturn(member);
+        when(memberRepository.findById(any(Long.class))).thenReturn(Optional.of(member));
+        OrganizerResponse organizerResponse = memberService.addOrganizerMember(request);
+
+        // when
+        OrganizerModifyRequest organizerModifyRequest = new OrganizerModifyRequest("name2", "19960103", "F",
+                "email2@gmail.com", "agency2");
+        Member modifiedMember = member.modifyOrganizer(organizerModifyRequest);
+        when(memberRepository.findById(organizerResponse.getId())).thenReturn(Optional.of(member));
+        memberService.modifyOrganizer(organizerModifyRequest, organizerResponse.getId());
+
+        // then
+        Member response = memberRepository.findById(1L).orElseThrow(RuntimeException::new);
+        assertThat(response.getName()).isEqualTo(modifiedMember.getName());
+    }
+
+    @DisplayName("참여자의 정보가 정상적으로 수정되었습니다.")
+    @Test
+    void modifyParticipantSuccess() {
+        // given
+        ParticipantRequest request = MemberInformation.createParticipantRequest();
+        Member member = MemberInformation.createParticipantMember();
+        when(memberRepository.save(any(Member.class))).thenReturn(member);
+        when(memberRepository.findById(any(Long.class))).thenReturn(Optional.of(member));
+        ParticipantResponse participantResponse = memberService.addParticipant(request);
+
+        // when
+        ParticipantModifyRequest participantModifyRequest = new ParticipantModifyRequest("name2", "19960103", "F",
+                "email2@gmail.com", "mint", "lol");
+        Member modifiedMember = member.modifyParticipant(participantModifyRequest);
+        when(memberRepository.findById(participantResponse.getId())).thenReturn(Optional.of(member));
+        memberService.modifyParticipant(participantModifyRequest, participantResponse.getId());
+
+        // then
+        Member response = memberRepository.findById(1L).orElseThrow(RuntimeException::new);
+        assertThat(response.getName()).isEqualTo(modifiedMember.getName());
     }
 }
