@@ -2,6 +2,7 @@ package seminar.seminar.member.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -14,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import seminar.seminar.member.common.MemberInformation;
 import seminar.seminar.member.domain.Member;
+import seminar.seminar.member.dto.MemberResponse;
 import seminar.seminar.member.dto.OrganizerModifyRequest;
 import seminar.seminar.member.dto.OrganizerRequest;
 import seminar.seminar.member.dto.OrganizerResponse;
@@ -134,5 +136,61 @@ class MemberServiceTest {
                 "email2@gmail.com", "mint", "lol");
         assertThatThrownBy(() -> memberService.modifyParticipant(participantModifyRequest, 1L))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @DisplayName("주최자의 정보를 정상 조회했습니다.")
+    @Test
+    void inquireOrganizerInformationSuccess() {
+        // given
+        OrganizerRequest request = MemberInformation.createOrganizerRequest();
+        Member member = MemberInformation.createOrganizerMember();
+        when(memberRepository.save(any(Member.class))).thenReturn(member);
+        OrganizerResponse organizerResponse = memberService.addOrganizerMember(request);
+
+        // when
+        when(memberRepository.findById(organizerResponse.getId())).thenReturn(Optional.of(member));
+        MemberResponse memberResponse = memberService.findById(organizerResponse.getId());
+
+        // then
+        assertAll(
+                () -> assertThat(memberResponse.getId()).isEqualTo(organizerResponse.getId()),
+                () -> assertThat(memberResponse.getName()).isEqualTo(member.getName()),
+                () -> assertThat(memberResponse.getBirthday()).isEqualTo(member.getBirthday()),
+                () -> assertThat(memberResponse.getGender()).isEqualTo(member.getGender()),
+                () -> assertThat(memberResponse.getUserId()).isEqualTo(member.getUserId()),
+                () -> assertThat(memberResponse.getEmail()).isEqualTo(member.getEmail()),
+                () -> assertThat(memberResponse.getAgency()).isEqualTo(member.getOrganizer().getAgency()),
+                () -> assertThat(memberResponse.getRestrictedMaterial()).isNull(),
+                () -> assertThat(memberResponse.getSelfIntroduction()).isNull()
+        );
+    }
+
+    @DisplayName("참여자의 정보를 정상 조회했습니다.")
+    @Test
+    void inquireParticipantInformationSuccess() {
+        // given
+        ParticipantRequest request = MemberInformation.createParticipantRequest();
+        Member member = MemberInformation.createParticipantMember();
+        when(memberRepository.save(any(Member.class))).thenReturn(member);
+        ParticipantResponse participantResponse = memberService.addParticipant(request);
+
+        // when
+        when(memberRepository.findById(participantResponse.getId())).thenReturn(Optional.of(member));
+        MemberResponse memberResponse = memberService.findById(participantResponse.getId());
+
+        // then
+        assertAll(
+                () -> assertThat(memberResponse.getId()).isEqualTo(participantResponse.getId()),
+                () -> assertThat(memberResponse.getName()).isEqualTo(member.getName()),
+                () -> assertThat(memberResponse.getBirthday()).isEqualTo(member.getBirthday()),
+                () -> assertThat(memberResponse.getGender()).isEqualTo(member.getGender()),
+                () -> assertThat(memberResponse.getUserId()).isEqualTo(member.getUserId()),
+                () -> assertThat(memberResponse.getEmail()).isEqualTo(member.getEmail()),
+                () -> assertThat(memberResponse.getAgency()).isNull(),
+                () -> assertThat(memberResponse.getRestrictedMaterial()).isEqualTo(
+                        member.getParticipant().getRestrictedMaterial()),
+                () -> assertThat(memberResponse.getSelfIntroduction()).isEqualTo(
+                        member.getParticipant().getSelfIntroduction())
+        );
     }
 }
