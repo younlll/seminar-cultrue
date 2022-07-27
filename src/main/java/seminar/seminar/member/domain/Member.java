@@ -8,8 +8,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import lombok.Getter;
+import seminar.seminar.member.dto.MemberResponse;
 import seminar.seminar.member.dto.OrganizerModifyRequest;
+import seminar.seminar.member.dto.OrganizerResponse;
 import seminar.seminar.member.dto.ParticipantModifyRequest;
+import seminar.seminar.member.dto.ParticipantResponse;
 
 @Entity
 @Getter
@@ -84,5 +87,46 @@ public class Member {
         this.participant.modifyParticipant(request.getRestrictedMaterial(), request.getSelfIntroduction());
 
         return this;
+    }
+
+    public OrganizerResponse toOrganizerResponse() {
+        return new OrganizerResponse(this.id, this.name);
+    }
+
+    public ParticipantResponse toParticipantResponse() {
+        return new ParticipantResponse(this.id, this.name);
+    }
+
+    public MemberResponse toMemberResponse() {
+        return new MemberResponse(this.id,
+                this.name,
+                this.birthday,
+                this.gender,
+                this.userId,
+                this.email,
+                getAgencyOfOrganizer(),
+                getRestrictedMaterialOfParticipant(),
+                getSelfIntroductionOfParticipant());
+    }
+
+    private String getAgencyOfOrganizer() {
+        if (this.organizer == null) {
+            return null;
+        }
+        return this.organizer.getAgency();
+    }
+
+    private String getRestrictedMaterialOfParticipant() {
+        if (this.participant == null) {
+            return null;
+        }
+        return this.participant.getRestrictedMaterial();
+    }
+
+    private String getSelfIntroductionOfParticipant() {
+        if (this.participant == null) {
+            return null;
+        }
+        return this.participant.getSelfIntroduction();
     }
 }

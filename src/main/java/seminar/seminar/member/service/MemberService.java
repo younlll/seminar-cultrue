@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import seminar.seminar.member.domain.Member;
+import seminar.seminar.member.dto.MemberResponse;
 import seminar.seminar.member.dto.OrganizerModifyRequest;
 import seminar.seminar.member.dto.OrganizerRequest;
 import seminar.seminar.member.dto.OrganizerResponse;
@@ -23,7 +24,7 @@ public class MemberService {
         Member organizeMember = OrganizerRequest.toMember(request);
         validateDuplicateMember(organizeMember);
         Member member = memberRepository.save(organizeMember);
-        return OrganizerResponse.toOrganizer(member);
+        return member.toOrganizerResponse();
     }
 
     @Transactional
@@ -33,7 +34,7 @@ public class MemberService {
                 request.getRestrictedMaterial(), request.getSelfIntroduction());
         validateDuplicateMember(participantMember);
         Member member = memberRepository.save(participantMember);
-        return ParticipantResponse.toParticipant(member);
+        return member.toParticipantResponse();
     }
 
     private void validateDuplicateMember(Member member) {
@@ -46,12 +47,17 @@ public class MemberService {
     @Transactional
     public OrganizerResponse modifyOrganizer(OrganizerModifyRequest request, Long id) {
         Member findMember = memberRepository.findById(id).orElseThrow(IllegalArgumentException::new);
-        return OrganizerResponse.toOrganizer(findMember.modifyOrganizer(request));
+        return findMember.modifyOrganizer(request).toOrganizerResponse();
     }
 
     @Transactional
     public ParticipantResponse modifyParticipant(ParticipantModifyRequest request, Long id) {
         Member findMember = memberRepository.findById(id).orElseThrow(IllegalArgumentException::new);
-        return ParticipantResponse.toParticipant(findMember.modifyParticipant(request));
+        return findMember.modifyParticipant(request).toParticipantResponse();
+    }
+
+    public MemberResponse findById(Long id) {
+        Member findMember = memberRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        return findMember.toMemberResponse();
     }
 }
