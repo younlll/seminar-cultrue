@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import seminar.seminar.config.AuthenticationRoles;
 import seminar.seminar.member.common.MemberInformation;
 import seminar.seminar.member.domain.Member;
 
@@ -17,7 +18,7 @@ class JwtTokenProviderTest {
         Member member = MemberInformation.createOrganizerMember();
 
         // when
-        String token = jwtTokenProvider.createJwtToken(member);
+        String token = jwtTokenProvider.createJwtToken(member, AuthenticationRoles.ORGANIZER.name());
 
         // then
         assertThat(token).isNotNull();
