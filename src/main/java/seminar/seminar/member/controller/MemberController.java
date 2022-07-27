@@ -2,14 +2,12 @@ package seminar.seminar.member.controller;
 
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import seminar.seminar.member.domain.Member;
 import seminar.seminar.member.dto.OrganizerModifyRequest;
 import seminar.seminar.member.dto.OrganizerRequest;
 import seminar.seminar.member.dto.OrganizerResponse;
@@ -48,7 +46,7 @@ public class MemberController {
 
     @PatchMapping("/update/participant/{id}")
     public ResponseEntity<ParticipantResponse> modifyParticipant(@PathVariable Long id,
-                                                               @RequestBody ParticipantModifyRequest request) {
+                                                                 @RequestBody ParticipantModifyRequest request) {
         return ResponseEntity.ok(memberService.modifyParticipant(request, id));
     }
 }
