@@ -9,10 +9,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import seminar.seminar.member.dto.AuthorityAdditionResponse;
 import seminar.seminar.member.dto.MemberResponse;
+import seminar.seminar.member.dto.OrganizerAdditionRequest;
 import seminar.seminar.member.dto.OrganizerModifyRequest;
 import seminar.seminar.member.dto.OrganizerRequest;
 import seminar.seminar.member.dto.OrganizerResponse;
+import seminar.seminar.member.dto.ParticipantAdditionRequest;
 import seminar.seminar.member.dto.ParticipantModifyRequest;
 import seminar.seminar.member.dto.ParticipantRequest;
 import seminar.seminar.member.dto.ParticipantResponse;
@@ -50,6 +53,18 @@ public class MemberController {
     public ResponseEntity<ParticipantResponse> modifyParticipant(@PathVariable Long id,
                                                                  @RequestBody ParticipantModifyRequest request) {
         return ResponseEntity.ok(memberService.modifyParticipant(request, id));
+    }
+
+    @PatchMapping("/addition/participant/{id}")
+    public ResponseEntity<AuthorityAdditionResponse> addParticipant(@PathVariable Long id,
+                                                                    @RequestBody ParticipantAdditionRequest request) {
+        return ResponseEntity.ok(memberService.addParticipant(request, id));
+    }
+
+    @PatchMapping("/addition/organizer/{id}")
+    public ResponseEntity<AuthorityAdditionResponse> addOrganizer(@PathVariable Long id,
+                                                                    @RequestBody OrganizerAdditionRequest request) {
+        return ResponseEntity.ok(memberService.addOrganizer(request, id));
     }
 
     @GetMapping("/{id}")

@@ -9,8 +9,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import lombok.Getter;
 import seminar.seminar.member.dto.MemberResponse;
+import seminar.seminar.member.dto.OrganizerAdditionRequest;
 import seminar.seminar.member.dto.OrganizerModifyRequest;
 import seminar.seminar.member.dto.OrganizerResponse;
+import seminar.seminar.member.dto.ParticipantAdditionRequest;
 import seminar.seminar.member.dto.ParticipantModifyRequest;
 import seminar.seminar.member.dto.ParticipantResponse;
 
@@ -128,5 +130,13 @@ public class Member {
             return null;
         }
         return this.participant.getSelfIntroduction();
+    }
+
+    public void addParticipant(ParticipantAdditionRequest request) {
+        this.participant.modifyParticipant(request.getRestrictedMaterial(), request.getSelfIntroduction());
+    }
+
+    public void addOrganizer(OrganizerAdditionRequest request) {
+        this.organizer.modifyOrganizer(request.getAgency());
     }
 }

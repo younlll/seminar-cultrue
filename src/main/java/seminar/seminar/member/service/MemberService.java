@@ -1,13 +1,20 @@
 package seminar.seminar.member.service;
 
+import static seminar.seminar.config.AuthenticationRoles.ALL;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import seminar.seminar.login.dto.LoginResponse;
+import seminar.seminar.login.service.JwtTokenProvider;
 import seminar.seminar.member.domain.Member;
+import seminar.seminar.member.dto.AuthorityAdditionResponse;
 import seminar.seminar.member.dto.MemberResponse;
+import seminar.seminar.member.dto.OrganizerAdditionRequest;
 import seminar.seminar.member.dto.OrganizerModifyRequest;
 import seminar.seminar.member.dto.OrganizerRequest;
 import seminar.seminar.member.dto.OrganizerResponse;
+import seminar.seminar.member.dto.ParticipantAdditionRequest;
 import seminar.seminar.member.dto.ParticipantModifyRequest;
 import seminar.seminar.member.dto.ParticipantRequest;
 import seminar.seminar.member.dto.ParticipantResponse;
@@ -18,6 +25,7 @@ import seminar.seminar.member.repository.MemberRepository;
 @Transactional(readOnly = true)
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
     public OrganizerResponse addOrganizerMember(OrganizerRequest request) {
@@ -59,5 +67,23 @@ public class MemberService {
     public MemberResponse findById(Long id) {
         Member findMember = memberRepository.findById(id).orElseThrow(IllegalArgumentException::new);
         return findMember.toMemberResponse();
+    }
+
+    @Transactional
+    public AuthorityAdditionResponse addParticipant(ParticipantAdditionRequest request, Long id) {
+        Member findMember = memberRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        findMember.addParticipant(request);
+        String role = ALL.name();
+        String token = jwtTokenProvider.createJwtToken(findMember, role);
+        return new AuthorityAdditionResponse(token);
+    }
+
+    @Transactional
+    public AuthorityAdditionResponse addOrganizer(OrganizerAdditionRequest request, Long id) {
+        Member findMember = memberRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        findMember.addOrganizer(request);
+        String role = ALL.name();
+        String token = jwtTokenProvider.createJwtToken(findMember, role);
+        return new AuthorityAdditionResponse(token);
     }
 }
